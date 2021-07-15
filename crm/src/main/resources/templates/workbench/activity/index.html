@@ -93,7 +93,7 @@
 			$.ajax({
 				url:"/activitySave",
 				data:{
-					"owner":$.trim($("#create-cost").val()),
+					"owner":$.trim($("select option:selected").val()),
 					"name":$.trim($("#create-name").val()),
 					"startdate":$.trim($("#create-startdate").val()),
 					"enddate":$.trim($("#create-enddate").val()),

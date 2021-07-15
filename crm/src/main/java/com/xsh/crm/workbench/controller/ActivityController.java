@@ -141,7 +141,6 @@ public class ActivityController {
         activity.setDescription(description);
         activity.setEnddate(enddate);
         activity.setStartdate(startdate);
-        activity.setName(name);
         int i = activityServiceImpl.insertSelective(activity);
         if (i>0) {
             return "true";
