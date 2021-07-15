@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xsh.crm.workbench.dao.ActivityMapper">
+  <resultMap id="BaseResultMap" type="com.xsh.crm.workbench.domain.Activity">
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="owner" jdbcType="CHAR" property="owner" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="startDate" jdbcType="CHAR" property="startdate" />
+    <result column="endDate" jdbcType="CHAR" property="enddate" />
+    <result column="cost" jdbcType="VARCHAR" property="cost" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="createTime" jdbcType="CHAR" property="createtime" />
+    <result column="createBy" jdbcType="VARCHAR" property="createby" />
+    <result column="editTime" jdbcType="CHAR" property="edittime" />
+    <result column="editBy" jdbcType="VARCHAR" property="editby" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, owner, name, startDate, endDate, cost, description, createTime, createBy, editTime, 
+    editBy
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_activity
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_activity
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xsh.crm.workbench.domain.Activity">
+    insert into tbl_activity (id, owner, name, startDate, 
+      endDate, cost, description, 
+      createTime, createBy, editTime, 
+      editBy)
+    values (#{id,jdbcType=CHAR}, #{owner,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{startdate,jdbcType=CHAR}, 
+      #{enddate,jdbcType=CHAR}, #{cost,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=CHAR}, #{createby,jdbcType=VARCHAR}, #{edittime,jdbcType=CHAR}, 
+      #{editby,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xsh.crm.workbench.domain.Activity">
+    insert into tbl_activity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="owner != null">
+        owner,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="startdate != null">
+        startDate,
+      </if>
+      <if test="enddate != null">
+        endDate,
+      </if>
+      <if test="cost != null">
+        cost,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="createby != null">
+        createBy,
+      </if>
+      <if test="edittime != null">
+        editTime,
+      </if>
+      <if test="editby != null">
+        editBy,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="owner != null">
+        #{owner,jdbcType=CHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="startdate != null">
+        #{startdate,jdbcType=CHAR},
+      </if>
+      <if test="enddate != null">
+        #{enddate,jdbcType=CHAR},
+      </if>
+      <if test="cost != null">
+        #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=CHAR},
+      </if>
+      <if test="createby != null">
+        #{createby,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=CHAR},
+      </if>
+      <if test="editby != null">
+        #{editby,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xsh.crm.workbench.domain.Activity">
+    update tbl_activity
+    <set>
+      <if test="owner != null">
+        owner = #{owner,jdbcType=CHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="startdate != null">
+        startDate = #{startdate,jdbcType=CHAR},
+      </if>
+      <if test="enddate != null">
+        endDate = #{enddate,jdbcType=CHAR},
+      </if>
+      <if test="cost != null">
+        cost = #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=CHAR},
+      </if>
+      <if test="createby != null">
+        createBy = #{createby,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        editTime = #{edittime,jdbcType=CHAR},
+      </if>
+      <if test="editby != null">
+        editBy = #{editby,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xsh.crm.workbench.domain.Activity">
+    update tbl_activity
+    set owner = #{owner,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      startDate = #{startdate,jdbcType=CHAR},
+      endDate = #{enddate,jdbcType=CHAR},
+      cost = #{cost,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=CHAR},
+      createBy = #{createby,jdbcType=VARCHAR},
+      editTime = #{edittime,jdbcType=CHAR},
+      editBy = #{editby,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <select id="selectActivity" resultType="com.xsh.crm.workbench.domain.Activity">
+    select * from tbl_activity
+    <where>
+      <if test="name !=null and name!=''">
+         name like '%'   #{name}   '%'
+      </if>
+
+        <if test="owner !=null and owner !=''">
+          and  owner like '%'   #{owner}   '%'
+        </if>
+
+        <if test="startDate !=null and startDate !=''">
+          and startDate &gt;= #{startDate}
+        </if>
+
+        <if test="endDate !=null and endDate!=''">
+          and endDate &lt;= #{endDate}
+        </if>
+    </where>
+    ORDER BY createTime DESC
+    limit #{first},#{last}
+  </select>
+
+  <select id="selectActivityCount" resultType="int">
+    select count(*) from tbl_activity
+    <where>
+      <if test="name !=null and name!=''">
+        name like '%'   #{name}   '%'
+      </if>
+
+      <if test="owner !=null and owner !=''">
+        and  owner like '%'   #{owner}   '%'
+      </if>
+
+      <if test="startDate !=null and startDate !=''">
+        and startDate &gt;= #{startDate}
+      </if>
+
+      <if test="endDate !=null and endDate!=''">
+        and endDate &lt;= #{endDate}
+      </if>
+    </where>
+
+  </select>
+
+</mapper>

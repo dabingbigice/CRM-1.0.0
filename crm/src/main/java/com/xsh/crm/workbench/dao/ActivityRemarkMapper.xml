@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xsh.crm.workbench.dao.ActivityRemarkMapper">
+  <resultMap id="BaseResultMap" type="com.xsh.crm.workbench.domain.ActivityRemark">
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="noteContent" jdbcType="VARCHAR" property="notecontent" />
+    <result column="createTime" jdbcType="CHAR" property="createtime" />
+    <result column="createBy" jdbcType="VARCHAR" property="createby" />
+    <result column="editTime" jdbcType="CHAR" property="edittime" />
+    <result column="editBy" jdbcType="VARCHAR" property="editby" />
+    <result column="editFlag" jdbcType="CHAR" property="editflag" />
+    <result column="activityId" jdbcType="CHAR" property="activityid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, noteContent, createTime, createBy, editTime, editBy, editFlag, activityId
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_activity_remark
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_activity_remark
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xsh.crm.workbench.domain.ActivityRemark">
+    insert into tbl_activity_remark (id, noteContent, createTime, 
+      createBy, editTime, editBy, 
+      editFlag, activityId)
+    values (#{id,jdbcType=CHAR}, #{notecontent,jdbcType=VARCHAR}, #{createtime,jdbcType=CHAR}, 
+      #{createby,jdbcType=VARCHAR}, #{edittime,jdbcType=CHAR}, #{editby,jdbcType=VARCHAR}, 
+      #{editflag,jdbcType=CHAR}, #{activityid,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xsh.crm.workbench.domain.ActivityRemark">
+    insert into tbl_activity_remark
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="notecontent != null">
+        noteContent,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="createby != null">
+        createBy,
+      </if>
+      <if test="edittime != null">
+        editTime,
+      </if>
+      <if test="editby != null">
+        editBy,
+      </if>
+      <if test="editflag != null">
+        editFlag,
+      </if>
+      <if test="activityid != null">
+        activityId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="notecontent != null">
+        #{notecontent,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=CHAR},
+      </if>
+      <if test="createby != null">
+        #{createby,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=CHAR},
+      </if>
+      <if test="editby != null">
+        #{editby,jdbcType=VARCHAR},
+      </if>
+      <if test="editflag != null">
+        #{editflag,jdbcType=CHAR},
+      </if>
+      <if test="activityid != null">
+        #{activityid,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xsh.crm.workbench.domain.ActivityRemark">
+    update tbl_activity_remark
+    <set>
+      <if test="notecontent != null">
+        noteContent = #{notecontent,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=CHAR},
+      </if>
+      <if test="createby != null">
+        createBy = #{createby,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        editTime = #{edittime,jdbcType=CHAR},
+      </if>
+      <if test="editby != null">
+        editBy = #{editby,jdbcType=VARCHAR},
+      </if>
+      <if test="editflag != null">
+        editFlag = #{editflag,jdbcType=CHAR},
+      </if>
+      <if test="activityid != null">
+        activityId = #{activityid,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xsh.crm.workbench.domain.ActivityRemark">
+    update tbl_activity_remark
+    set noteContent = #{notecontent,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=CHAR},
+      createBy = #{createby,jdbcType=VARCHAR},
+      editTime = #{edittime,jdbcType=CHAR},
+      editBy = #{editby,jdbcType=VARCHAR},
+      editFlag = #{editflag,jdbcType=CHAR},
+      activityId = #{activityid,jdbcType=CHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

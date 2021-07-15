@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xsh.crm.settings.dao.StudentMapper">
+  <resultMap id="BaseResultMap" type="com.xsh.crm.settings.domain.Student">
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="loginAct" jdbcType="VARCHAR" property="loginact" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="loginPwd" jdbcType="VARCHAR" property="loginpwd" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="expireTime" jdbcType="CHAR" property="expiretime" />
+    <result column="lockState" jdbcType="CHAR" property="lockstate" />
+    <result column="deptno" jdbcType="CHAR" property="deptno" />
+    <result column="allowIps" jdbcType="VARCHAR" property="allowips" />
+    <result column="createTime" jdbcType="CHAR" property="createtime" />
+    <result column="createBy" jdbcType="VARCHAR" property="createby" />
+    <result column="editTime" jdbcType="CHAR" property="edittime" />
+    <result column="editBy" jdbcType="VARCHAR" property="editby" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, loginAct, name, loginPwd, email, expireTime, lockState, deptno, allowIps, createTime, 
+    createBy, editTime, editBy
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_user
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_user
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xsh.crm.settings.domain.Student">
+    insert into tbl_user (id, loginAct, name, 
+      loginPwd, email, expireTime, 
+      lockState, deptno, allowIps, 
+      createTime, createBy, editTime, 
+      editBy)
+    values (#{id,jdbcType=CHAR}, #{loginact,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{loginpwd,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{expiretime,jdbcType=CHAR}, 
+      #{lockstate,jdbcType=CHAR}, #{deptno,jdbcType=CHAR}, #{allowips,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=CHAR}, #{createby,jdbcType=VARCHAR}, #{edittime,jdbcType=CHAR}, 
+      #{editby,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xsh.crm.settings.domain.Student">
+    insert into tbl_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="loginact != null">
+        loginAct,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="loginpwd != null">
+        loginPwd,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="expiretime != null">
+        expireTime,
+      </if>
+      <if test="lockstate != null">
+        lockState,
+      </if>
+      <if test="deptno != null">
+        deptno,
+      </if>
+      <if test="allowips != null">
+        allowIps,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="createby != null">
+        createBy,
+      </if>
+      <if test="edittime != null">
+        editTime,
+      </if>
+      <if test="editby != null">
+        editBy,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="loginact != null">
+        #{loginact,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="loginpwd != null">
+        #{loginpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="expiretime != null">
+        #{expiretime,jdbcType=CHAR},
+      </if>
+      <if test="lockstate != null">
+        #{lockstate,jdbcType=CHAR},
+      </if>
+      <if test="deptno != null">
+        #{deptno,jdbcType=CHAR},
+      </if>
+      <if test="allowips != null">
+        #{allowips,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=CHAR},
+      </if>
+      <if test="createby != null">
+        #{createby,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=CHAR},
+      </if>
+      <if test="editby != null">
+        #{editby,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xsh.crm.settings.domain.Student">
+    update tbl_user
+    <set>
+      <if test="loginact != null">
+        loginAct = #{loginact,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="loginpwd != null">
+        loginPwd = #{loginpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="expiretime != null">
+        expireTime = #{expiretime,jdbcType=CHAR},
+      </if>
+      <if test="lockstate != null">
+        lockState = #{lockstate,jdbcType=CHAR},
+      </if>
+      <if test="deptno != null">
+        deptno = #{deptno,jdbcType=CHAR},
+      </if>
+      <if test="allowips != null">
+        allowIps = #{allowips,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=CHAR},
+      </if>
+      <if test="createby != null">
+        createBy = #{createby,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        editTime = #{edittime,jdbcType=CHAR},
+      </if>
+      <if test="editby != null">
+        editBy = #{editby,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xsh.crm.settings.domain.Student">
+    update tbl_user
+    set loginAct = #{loginact,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      loginPwd = #{loginpwd,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      expireTime = #{expiretime,jdbcType=CHAR},
+      lockState = #{lockstate,jdbcType=CHAR},
+      deptno = #{deptno,jdbcType=CHAR},
+      allowIps = #{allowips,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=CHAR},
+      createBy = #{createby,jdbcType=VARCHAR},
+      editTime = #{edittime,jdbcType=CHAR},
+      editBy = #{editby,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <select id="userLogin" resultType="com.xsh.crm.settings.domain.Student">
+    select * from tbl_user where loginAct=#{username} and loginPwd=#{password}
+  </select>
+  <select id="password" resultType="int">
+    select count(*) from tbl_user where loginPwd=#{loginPwd}
+  </select>
+</mapper>

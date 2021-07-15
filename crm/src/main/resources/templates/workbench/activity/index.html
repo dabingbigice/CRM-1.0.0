@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+<link th:href="@{/jquery/bootstrap_3.3.0/css/bootstrap.min.css}" type="text/css" rel="stylesheet" />
+<link th:href="@{/jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css}" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript" th:src="@{/jquery/jquery-1.11.1-min.js}"></script>
+<script type="text/javascript" th:src="@{/jquery/bootstrap_3.3.0/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js}"></script>
+<script type="text/javascript" th:src="@{/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/jquery/bs_pagination/jquery.bs_pagination.min.css}">
+	<script type="text/javascript" th:src="@{/jquery/bs_pagination/jquery.bs_pagination.min.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery/bs_pagination/en.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+
+	$(function(){
+		//点击更新后同步数据
+		$("#updateMessage").click(function (){
+			$.ajax({
+				url:"/updateActivity",
+				data:{
+					"id":$("input[name=xz]:checked").val(),
+					"updateName":$("#echo-name").val(),
+					"updateStartTime":$("#echo-startTime").val(),
+					"updateEndTime":$("#echo-endTime").val(),
+					"updateDescribe":$("#echo-describe").val(),
+					"updateCost":$("#echo-cost").val()
+				},
+				success:function (data){
+			if (data=="true"){
+				alert("更新成功！")
+				pageList(1,2)
+			}else {
+				alert("修改失败！")
+			}
+				}
+			})
+		})
+		//点击修改后回显数据
+	$("#updateBtn").click(function (){
+		//判断修改的条数
+		let $xz = $("input[name=xz]:checked");
+		if($xz.length==0){
+			alert("请选择一条信息进行修改！")
+		}else if ($xz.length==2){
+			alert("只能选择一条信息进行修改！")
+		}else {
+			$.ajax({
+				//处理回显数据
+				url:"/echoData",
+				data: {
+					"id":$xz.val()
+				},
+				success:function (data){
+					let prop = $("input[name=xz]:checked")[0];
+					var aaa=prop.getAttribute("dataOwner");
+					//所有者名单
+					window.updateHtml=""
+					//发送ajax获取所有者的name
+					$.ajax({
+						url:"/selectNames",
+						success:function (data){
+							$.each(data,function (index,value){
+								window.updateHtml+="<option>"+value.name+"</option>"
+							})
+							//展示数据
+							$("#edit-marketActivityOwner").html(window.updateHtml)
+						}
+					})
+					//后台传递的所有回显信息
+					//给表单回显
+					$("#echo-name").val(data.name)
+					$("#echo-startTime").val(data.startdate)
+					$("#echo-endTime").val(data.enddate)
+					$("#echo-describe").val(data.description)
+					$("#echo-cost").val(data.cost)
+
+					//打开窗口
+					$("#editActivityModal").modal("show");
+
+
+				}
+			})
+
+		}
+
+	})
+		//保存
+		$("#save").click(function (){
+			$.ajax({
+				url:"/activitySave",
+				data:{
+					"owner":$.trim($("#create-cost").val()),
+					"name":$.trim($("#create-name").val()),
+					"startdate":$.trim($("#create-startdate").val()),
+					"enddate":$.trim($("#create-enddate").val()),
+					"cost":$.trim($("#create-cost").val()),
+					"description":$.trim($("#create-description").val())
+				},
+				success:function (data){
+					if (data=="true"){
+						//清空表单数据
+						$("#activity")[0].reset()
+						$("#createActivityModal").modal("hide")
+						alert("保存成功！")
+						pageList(1,2)
+					}else {
+						alert("保存失败！")
+						pageList(1,2)
+
+					}
+				}
+			})
+		})
+		function check() {
+			//删除取消全选 选项框
+				$("#qx")[0].checked = false;
+
+		}
+		//删除操作
+		$("#deleteBtn").click(function (){
+		let id = $("input[name=xz]:checked");
+			if (id.length==0){
+				alert("请选择需要删除的记录")
+			}else {
+				/*"?id=xxx&id=xxx&id=xxx&id=xxx"*/
+			window.parm="?id=";
+			window.count=id.length;
+				for (let i = 0; i < id.length; i++) {
+					if ((i+1)==id.length){
+						parm=parm+id[i].value
+					}else {
+						parm=parm+id[i].value+"&id="
+					}
+				}
+			}
+			let con = confirm("确认删除这"+count+"条用户记录吗?");
+			if (con){
+				$.ajax({
+					url:"/delete"+parm,
+
+					success:function (data){
+						alert(data)
+						check()
+						pageList(1,2)
+					}
+				})
+			}else {
+				return;
+			}
+		})
+
+
+
+		//展示日历
+		$(".time").datetimepicker({
+			minView: "month",
+			language: 'zh-CN',
+			format: 'yyyy-mm-dd',
+			autoclose: true,
+			todayBtn: true,
+			pickerPosition: "bottom-left"
+		});
+
+
+		//分页
+		pageList(1,2)
+
+		$("#search").click(function (){
+			//给隐藏域赋值
+
+			$("#hidden-name").val($.trim($("#search-name").val()));
+			$("#hidden-owner").val($.trim($("#search-owner").val()));
+			$("#hidden-startDate").val($.trim($("#search-startDate").val()));
+			$("#hidden-endDate").val($.trim($("#search-endDate").val()));
+
+			pageList(1,2)
+
+		})
+		function pageList(pageNo,pageSize){
+
+			//查询前，将隐藏域中保存的信息取出来，重新赋予到搜索框中
+
+			$("#search-name").val($.trim($("#hidden-name").val()));
+			$("#search-owner").val($.trim($("#hidden-owner").val()));
+			$("#search-startDate").val($.trim($("#hidden-startDate").val()));
+			$("#search-endDate").val($.trim($("#hidden-endDate").val()));
+
+			window["html"]=""
+			window.total=0
+			$.ajax({
+				url:"/selectActivity",
+				data:{
+					"pageNo":pageNo,
+					"pageSize":pageSize,
+					"searchName":$.trim($("#search-name").val()),
+					"searchOwner":$.trim($("#search-owner").val()),
+					"searchStartTime":$.trim($("#search-startTime").val()),
+					"searchEndTime":$.trim($("#search-endTime").val())
+				},
+				success:function (data){
+					$("#tbody").html("没有查询到信息！")
+
+					$.each(data,function (index,value){
+						window.total+=value.total
+						//发送ajax获取所有者的name
+						ownerTempleId=value.id
+						$.ajax({
+							url:"/selectActivityNames",
+							data:{
+								"id":value.owner
+							},
+							success:function (data){
+
+								//展示数据
+								$("#owner").html(data)
+								window.html+='<tr class="active"><td><input type="checkbox" dataOwner="'+data+'"value='+value.id+' name="xz"/>'+'<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'/detail?id='+value.id+'\';">'+value.name+'</a></td>'+ ' <td >'+data+' </td>'+'<td >'+value.startdate+ '</td>'+'<td>'+value.enddate+'</td>'+'<br>'
+								var htmls=window["html"]
+								$("#tbody").html(htmls)
+							}
+						})
+
+					})
+					var totalPages=window.total%pageSize==0?window.total/pageSize:parseInt(window.total/pageSize)+1;
+					//分页插件
+					$("#activityPage").bs_pagination({
+						currentPage: pageNo, // 页码
+						rowsPerPage: pageSize, // 每页显示的记录条数
+						maxRowsPerPage: 20, // 每页最多显示的记录条数
+						totalPages: totalPages, // 总页数
+						totalRows: window.total, // 总记录条数
+
+						visiblePageLinks: 3, // 显示几个卡片
+
+						showGoToPage: true,
+						showRowsPerPage: true,
+						showRowsInfo: true,
+						showRowsDefaultInfo: true,
+
+						onChangePage : function(event, data){
+							pageList(data.currentPage , data.rowsPerPage);
+						}
+					});
+				}
+			})
+		}
+
+
+		$("#addBtn").click(function (){
+
+			$(".time").datetimepicker({
+				minView: "month",
+				language:  'zh-CN',
+				format: 'yyyy-mm-dd',
+				autoclose: true,
+				todayBtn: true,
+				pickerPosition: "bottom-left"
+			});
+
+			var id=	[[${#session.getAttribute('student').id}]]
+			$.ajax({
+				url:"/selectNames",
+				success:function (data){
+					$("#create-marketActivityOwner").html("")
+					$.each(data,function (index,value){
+						$("#create-marketActivityOwner").append(
+								"<option value="+value.id+">"+value.name+"</option>"
+						)
+						window.ownerId = $("#create-marketActivityOwner").val(id);
+
+					})
+				}
+			})
+			//所有者展现编写完毕
+		$("#createActivityModal").modal("show")
+		})
+
+	});
+	
+</script>
+</head>
+<body>
+
+<input type="hidden" id="hidden-name"/>
+<input type="hidden" id="hidden-owner"/>
+<input type="hidden" id="hidden-startDate"/>
+<input type="hidden" id="hidden-endDate"/>
+	<!-- 创建市场活动的模态窗口 -->
+	<div class="modal fade" id="createActivityModal" role="dialog">
+		<div class="modal-dialog" role="document" style="width: 85%;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel1">创建市场活动</h4>
+				</div>
+				<div class="modal-body">
+				
+					<form class="form-horizontal" id="activity"role="form">
+					
+						<div class="form-group">
+							<label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
+							<div class="col-sm-10" style="width: 300px;">
+								<select class="form-control" id="create-marketActivityOwner">
+
+								</select>
+							</div>
+                            <label for="create-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
+                            <div class="col-sm-10" style="width: 300px;">
+                                <input type="text" class="form-control" id="create-name">
+                            </div>
+						</div>
+						
+						<div class="form-group">
+							<label for="create-startTime" class="col-sm-2 control-label time">开始日期</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="text" class="form-control time" id="create-startdate" readonly>
+							</div>
+							<label for="create-endTime" class="col-sm-2 control-label ">结束日期</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="text" class="form-control time" id="create-enddate" readonly>
+							</div>
+						</div>
+                        <div class="form-group">
+
+                            <label for="create-cost" class="col-sm-2 control-label">成本</label>
+                            <div class="col-sm-10" style="width: 300px;">
+                                <input type="text" class="form-control" id="create-cost">
+                            </div>
+                        </div>
+						<div class="form-group">
+							<label for="create-describe" class="col-sm-2 control-label">描述</label>
+							<div class="col-sm-10" style="width: 81%;">
+								<textarea class="form-control" rows="3" id="create-description"></textarea>
+							</div>
+						</div>
+						
+					</form>
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" id="save" data-dismiss="modal">保存</button>
+					<script th:inline="javascript">
+
+					</script>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 修改市场活动的模态窗口 -->
+	<div class="modal fade" id="editActivityModal" role="dialog">
+		<div class="modal-dialog" role="document" style="width: 85%;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel2">修改市场活动</h4>
+				</div>
+				<div class="modal-body">
+				
+					<form class="form-horizontal" role="form">
+					
+						<div class="form-group">
+							<label for="edit-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
+							<div class="col-sm-10" style="width: 300px;">
+								<select class="form-control" id="edit-marketActivityOwner">
+
+								</select>
+							</div>
+                            <label for="edit-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
+                            <div class="col-sm-10" style="width: 300px;">
+                                <input type="text" class="form-control" id="echo-name" >
+                            </div>
+						</div>
+
+						<div class="form-group">
+							<label for="edit-startTime" class="col-sm-2 control-label">开始日期</label>
+							<div class="col-sm-10" style="width: 300px;">
+
+								<input type="text" class="form-control time" id="echo-startTime" value="" readonly>
+
+							</div>
+							<label for="edit-endTime" class="col-sm-2 control-label">结束日期</label>
+							<div class="col-sm-10" style="width: 300px;">
+
+								<input type="text" class="form-control time" id="echo-endTime" value="" readonly>
+
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="edit-cost" class="col-sm-2 control-label">成本</label>
+							<div class="col-sm-10" style="width: 300px;">
+
+								<input type="text" class="form-control" id="echo-cost" value="5,000">
+
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="edit-describe" class="col-sm-2 control-label">描述</label>
+							<div class="col-sm-10" style="width: 81%;">
+
+								<textarea class="form-control" rows="3" id="echo-describe">市场活动Marketing，是指品牌主办或参与的展览会议与公关市场活动，包括自行主办的各类研讨会、客户交流会、演示会、新产品发布会、体验会、答谢会、年会和出席参加并布展或演讲的展览会、研讨会、行业交流会、颁奖典礼等</textarea>
+
+							</div>
+						</div>
+						
+					</form>
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary"	id="updateMessage" data-dismiss="modal">更新</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<!--查询-->
+	
+	<div>
+		<div style="position: relative; left: 10px; top: -10px;">
+			<div class="page-header">
+				<h3>市场活动列表</h3>
+			</div>
+		</div>
+	</div>
+	<div style="position: relative; top: -20px; left: 0px; width: 100%; height: 100%;">
+		<div style="width: 100%; position: absolute;top: 5px; left: 10px;">
+		
+			<div class="btn-toolbar" role="toolbar" style="height: 80px;">
+				<form class="form-inline" role="form" style="position: relative;top: 8%; left: 5px;">
+				  
+				  <div class="form-group">
+				    <div class="input-group">
+				      <div class="input-group-addon">名称</div>
+				      <input class="form-control" type="text" id="search-name">
+				    </div>
+				  </div>
+				  
+				  <div class="form-group">
+				    <div class="input-group">
+				      <div class="input-group-addon">所有者</div>
+				      <input class="form-control" type="text" id="search-owner">
+				    </div>
+				  </div>
+
+
+				  <div class="form-group">
+				    <div class="input-group">
+				      <div class="input-group-addon">开始日期</div>
+					  <input class="form-control time" type="text"id="search-startTime" readonly/>
+				    </div>
+				  </div>
+					<script type="text/javascript">
+						//展示日历
+
+					</script>
+				  <div class="form-group">
+				    <div class="input-group">
+				      <div class="input-group-addon">结束日期</div>
+					  <input class="form-control time"  type="text" id="search-endTime" readonly>
+				    </div>
+				  </div>
+				  
+				  <button type="button" id="search" class="btn btn-default">查询</button>
+				  
+				</form>
+			</div>
+			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 5px;">
+				<div class="btn-group" style="position: relative; top: 18%;">
+				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+					<button type="button" class="btn btn-default" id="updateBtn"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
+					<button type="button" id="deleteBtn"class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				</div>
+				
+			</div>
+			<div style="position: relative;top: 10px;">
+				<table class="table table-hover">
+					<thead>
+						<tr style="color: #B3B3B3;">
+							<td><input type="checkbox" id="qx"/></td>
+							<td>名称</td>
+                            <td>所有者</td>
+							<td>开始日期</td>
+							<td>结束日期</td>
+						</tr>
+					</thead>
+					<tbody id="tbody">
+
+					</tbody>
+				</table>
+			</div>
+			
+			<div style="height: 50px; position: relative;top: 30px;">
+				<div id="activityPage">
+				</div>
+
+
+			</div>
+			
+		</div>
+		
+	</div>
+</body>
+</html>
+<!--全选全不选脚本-->
+<script type="text/javascript">
+	$("#qx").click(function (){
+		this.checked=this.checked;
+		var fx = $("[name=xz]");
+		for (let i = 0; i < fx.length; i++) {
+			fx[i].checked=this.checked
+		}
+	})
+
+	$("#tbody").on("click",$("[name=xz]"),function (){
+		var reslut=$("[name=xz]");
+			var intReslut=0
+				for (let i = 0; i < reslut.length; i++) {
+					if (reslut[i].checked){
+						intReslut+=1
+					}else {
+						intReslut+=0;
+					}
+			}
+			if (intReslut==reslut.length){
+				$("#qx")[0].checked=true;
+			}else {
+				$("#qx")[0].checked=false;
+
+			}
+	})
+</script>

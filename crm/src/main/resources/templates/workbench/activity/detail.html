@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+    <link th:href="@{/jquery/bootstrap_3.3.0/css/bootstrap.min.css}" type="text/css" rel="stylesheet" />
+    <link th:href="@{/jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css}" type="text/css" rel="stylesheet" />
+
+    <script type="text/javascript" th:src="@{/jquery/jquery-1.11.1-min.js}"></script>
+    <script type="text/javascript" th:src="@{/jquery/bootstrap_3.3.0/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js}"></script>
+    <script type="text/javascript" th:src="@{/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/jquery/bs_pagination/jquery.bs_pagination.min.css}">
+    <script type="text/javascript" th:src="@{/jquery/bs_pagination/jquery.bs_pagination.min.js}"></script>
+    <script type="text/javascript" th:src="@{/jquery/bs_pagination/en.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+
+	//默认情况下取消和保存按钮是隐藏的
+	var cancelAndSaveBtnDefault = true;
+	
+	$(function(){
+        window.id= [[${#session.getAttribute('activityMessage').id}]]
+
+        //删除
+        $("#delete").click(function (){
+            $.ajax({
+                url:"/deleteMsg",
+                data: {
+                    "id":window.id
+                },
+                success:function (){
+                    alert("删除成功！")
+                    location="/indexActivity"
+                }
+
+            })
+        })
+	    //函数入口调用回显数据
+        echo()
+        //点击更新后同步数据
+        $("#update").click(function (){
+
+            $.ajax({
+                url:"/updateActivity",
+                data:{
+                    "id":window.id,
+                    "ownerId":$("select option:selected").val(),
+                    "updateName":$("#edit-marketActivityName").val(),
+                    "updateStartTime":$("#edit-startTime").val(),
+                    "updateEndTime":$("#edit-endTime").val(),
+                    "updateDescribe":$("#edit-describe").val(),
+                    "updateCost":$("#edit-cost").val()
+                },
+                success:function (data){
+                    if (data=="true"){
+                        alert("更新成功！")
+                        location.reload()
+                        echo()
+                    }else {
+                        alert("修改失败！")
+
+                    }
+                }
+            })
+        })
+	    function echo() {//窗口加载完毕后回显数据
+               var activityId= [[${#session.getAttribute('activityMessage').id}]]
+            //修改完毕后更新id
+            $.ajax({
+                url:"/detail?id="+activityId
+            })
+            let msg = [[${#session.getAttribute('activityMessage')}]];
+            $("#name").html(msg.name)
+            $("#startTime").html(msg.startdate)
+            $("#endTime").html(msg.enddate)
+            $("#cost").html(msg.cost)
+            $("#description").html(msg.description)
+            $("#createBy").html(msg.createby)
+            $("#editBy").html(msg.editby)
+            $("#owner").html(msg.owner)
+            $("#createTime").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + msg.createtime)
+            $("#editTime").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + msg.edittime)
+            $("#edit-startTime").val(msg.startdate)
+            $("#edit-endTime").val(msg.enddate)
+
+        }
+        //打开模态窗口时回显数据
+        $("#editMsg").click(function (){
+            //回显
+            let msg = [[${#session.getAttribute('activityMessage')}]];
+            $("#edit-marketActivityName").val(msg.name)
+            $("#edit-startTime").val(msg.startdate)
+            $("#edit-endTime").val(msg.enddate)
+            $("#edit-cost").val(msg.cost)
+            $("#edit-describe").html(msg.description)
+            var id=	[[${#session.getAttribute('student').id}]]
+
+            $.ajax({
+                url:"/selectNames",
+                success:function (data){
+                    $("#create-marketActivityOwner").html("")
+                    $.each(data,function (index,value){
+                        $("#edit-marketActivityOwner").append(
+                            "<option value="+value.id+">"+value.name+"</option>"
+                        )
+                        window.ownerId = $("#edit-marketActivityOwner").val(id);
+
+                    })
+                }
+            })
+
+            //所有者展现编写完毕
+            $("#edit-marketActivityOwner").modal("show")
+        })
+
+
+		$("#remark").focus(function(){
+			if(cancelAndSaveBtnDefault){
+				//设置remarkDiv的高度为130px
+				$("#remarkDiv").css("height","130px");
+				//显示
+				$("#cancelAndSaveBtn").show("2000");
+				cancelAndSaveBtnDefault = false;
+			}
+		});
+            //日历插件
+        $(".time").datetimepicker({
+            minView: "month",
+            language:  'zh-CN',
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayBtn: true,
+            pickerPosition: "bottom-left"
+        });
+
+
+        $("#cancelBtn").click(function(){
+			//显示
+			$("#cancelAndSaveBtn").hide();
+			//设置remarkDiv的高度为130px
+			$("#remarkDiv").css("height","90px");
+			cancelAndSaveBtnDefault = true;
+		});
+		
+		$(".remarkDiv").mouseover(function(){
+			$(this).children("div").children("div").show();
+		});
+		
+		$(".remarkDiv").mouseout(function(){
+			$(this).children("div").children("div").hide();
+		});
+		
+		$(".myHref").mouseover(function(){
+			$(this).children("span").css("color","red");
+		});
+		
+		$(".myHref").mouseout(function(){
+			$(this).children("span").css("color","#E6E6E6");
+		});
+	});
+	
+</script>
+
+</head>
+<body>
+	
+	<!-- 修改市场活动备注的模态窗口 -->
+
+
+    <!-- 修改市场活动的模态窗口 -->
+    <div class="modal fade" id="editActivityModal" role="dialog">
+        <div class="modal-dialog" role="document" style="width: 85%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">修改市场活动</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form class="form-horizontal" role="form">
+
+                        <div class="form-group">
+                            <label for="edit-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
+                            <div class="col-sm-10" style="width: 300px;">
+                                <select class="form-control" id="edit-marketActivityOwner">
+
+                                </select>
+                            </div>
+                            <label for="edit-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
+                            <div class="col-sm-10" style="width: 300px;">
+                                <input type="text" class="form-control" id="edit-marketActivityName" value="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-startTime" class="col-sm-2 control-label">开始日期</label>
+                            <div class="col-sm-10" style="width: 300px;">
+                                <input type="text" class="form-control time" id="edit-startTime" readonly value="">
+                            </div>
+                            <label for="edit-endTime" class="col-sm-2 control-label">结束日期</label>
+                            <div class="col-sm-10" style="width: 300px;">
+                                <input type="text" class="form-control time" id="edit-endTime" readonly value="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-cost" class="col-sm-2 control-label">成本</label>
+                            <div class="col-sm-10" style="width: 300px;">
+                                <input type="text" class="form-control" id="edit-cost" value="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-describe" class="col-sm-2 control-label">描述</label>
+                            <div class="col-sm-10" style="width: 81%;">
+                                <textarea class="form-control" rows="3" id="edit-describe"></textarea>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="update" data-dismiss="modal">更新</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<!-- 返回按钮 -->
+	<div style="position: relative; top: 35px; left: 10px;">
+		<a href="javascript:void(0);" onclick="window.history.back();"><span class="glyphicon glyphicon-arrow-left" style="font-size: 20px; color: #DDDDDD"></span></a>
+	</div>
+	
+	<!-- 大标题 -->
+	<div style="position: relative; left: 40px; top: -30px;">
+		<div class="page-header">
+			<h3>市场活动-发传单 <small th:inline="text">[[${#session.getAttribute('activityMessage').startdate}]] ~ [[${#session.getAttribute('activityMessage').enddate}]]</small></h3>
+		</div>
+		<div style="position: relative; height: 50px; width: 250px;  top: -72px; left: 700px;">
+			<button type="button" class="btn btn-default" id="editMsg" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
+			<button type="button" id="delete" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+		</div>
+	</div>
+	
+	<!-- 详细信息 -->
+	<div style="position: relative; top: -70px;">
+		<div style="position: relative; left: 40px; height: 30px;">
+			<div style="width: 300px; color: gray;">所有者</div>
+			<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b id="owner"></b></div>
+			<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">名称</div>
+			<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b id="name"></b></div>
+			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
+			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
+		</div>
+
+		<div style="position: relative; left: 40px; height: 30px; top: 10px;">
+			<div style="width: 300px; color: gray;">开始日期</div>
+			<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b id="startTime"></b></div>
+			<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">结束日期</div>
+			<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b id="endTime"></b></div>
+			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
+			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
+		</div>
+		<div style="position: relative; left: 40px; height: 30px; top: 20px;">
+			<div style="width: 300px; color: gray;">成本</div>
+			<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b id="cost"></b></div>
+			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -20px;"></div>
+		</div>
+		<div style="position: relative; left: 40px; height: 30px; top: 30px;">
+			<div style="width: 300px; color: gray;">创建者</div>
+			<div style="width: 500px;position: relative; left: 200px; top: -20px;"><b id="createBy">&nbsp;&nbsp;&nbsp;&nbsp;</b><small id="createTime" style="font-size: 10px; color: gray;"></small></div>
+			<div style="height: 1px; width: 550px; background: #D5D5D5; position: relative; top: -20px;"></div>
+		</div>
+		<div style="position: relative; left: 40px; height: 30px; top: 40px;">
+			<div style="width: 300px; color: gray;">修改者</div>
+			<div style="width: 500px;position: relative; left: 200px; top: -20px;"><b id="editBy">&nbsp;&nbsp;&nbsp;&nbsp;</b><small id="editTime" style="font-size: 10px; color: gray;"></small></div>
+			<div style="height: 1px; width: 550px; background: #D5D5D5; position: relative; top: -20px;"></div>
+		</div>
+		<div style="position: relative; left: 40px; height: 30px; top: 50px;">
+			<div style="width: 300px; color: gray;">描述</div>
+			<div style="width: 630px;position: relative; left: 200px; top: -20px;">
+				<b id="description">
+
+				</b>
+			</div>
+			<div style="height: 1px; width: 850px; background: #D5D5D5; position: relative; top: -20px;"></div>
+		</div>
+	</div>
+	
+
+	<div style="height: 200px;"></div>
+</body>
+</html>
