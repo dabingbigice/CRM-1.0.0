@@ -28,7 +28,7 @@ public class ActivityController {
 
         @RequestMapping("/indexActivity")
         public String indexActivity(){
-            return "/workbench/activity/index";
+            return "workbench/activity/index";
         }
     @RequestMapping("/deleteMsg")
     @ResponseBody
@@ -115,7 +115,7 @@ public class ActivityController {
         activity.setOwner(student.getName());
         request.getSession().setAttribute("activityMessage",activity);
 
-        return "/workbench/activity/detail";
+        return "workbench/activity/detail";
     }
     /**
      * 修改活动信息

@@ -61,11 +61,11 @@ public class UserController {
     }
     @RequestMapping("/workbench")
     public String userIndex(){
-        return "/workbench/index";
+        return "workbench/index";
     }
     @RequestMapping("/main/index")
     public String mainIndex(){
-        return "/workbench/main/index";
+        return "workbench/main/index";
     }
 
     /**
@@ -115,56 +115,56 @@ public class UserController {
      */
     @RequestMapping("/activity/index")
     public String activityIndex(){
-        return "/workbench/activity/index";
+        return "workbench/activity/index";
     }
 
 
 
     @RequestMapping("/clue/index")
     public String clueIndex(){
-        return "/workbench/clue/index";
+        return "workbench/clue/index";
     }
 
 
 
     @RequestMapping("/customer/index")
     public String customerIndex(){
-        return "/workbench/customer/index";
+        return "workbench/customer/index";
     }
 
 
     @RequestMapping("/contacts/index")
     public String contactsIndex(){
-        return "/workbench/contacts/index";
+        return "workbench/contacts/index";
     }
 
     @RequestMapping("/transaction/index")
     public String  transactionIndex(){
-        return "/workbench/transaction/index";
+        return "workbench/transaction/index";
     }
 
     @RequestMapping("/visit/index")
     public String  visitIndex(){
-        return "/workbench/visit/index";
+        return "workbench/visit/index";
     }
 
     @RequestMapping("/chart/activity/index")
     public String  chartActivityIndex(){
-        return "/workbench/chart/activity/index";
+        return "workbench/chart/activity/index";
     }
 
     @RequestMapping("/chart/clue/index")
     public String  chartClueIndex(){
-        return "/workbench/chart/clue/index";
+        return "workbench/chart/clue/index";
     }
 
 
     @RequestMapping("/chart/customerAndContacts/index")
     public String   chartCustomerAndContactsIndex(){
-        return "/workbench/chart/customerAndContacts/index";
+        return "workbench/chart/customerAndContacts/index";
     }
     @RequestMapping("/chart/transaction/index")
     public String   chartTransactionIndex(){
-        return "/workbench/chart/transaction/index";
+        return "workbench/chart/transaction/index";
     }
 }
