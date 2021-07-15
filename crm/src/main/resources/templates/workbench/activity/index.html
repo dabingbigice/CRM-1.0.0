@@ -202,8 +202,10 @@
 					"searchEndTime":$.trim($("#search-endTime").val())
 				},
 				success:function (data){
-					$("#tbody").html("没有查询到信息！")
+					if (data==''){
+						$("#tbody").html("没有查询到相关用户！")
 
+					}
 					$.each(data,function (index,value){
 						window.total+=value.total
 						//发送ajax获取所有者的name
@@ -214,7 +216,6 @@
 								"id":value.owner
 							},
 							success:function (data){
-
 								//展示数据
 								$("#owner").html(data)
 								window.html+='<tr class="active"><td><input type="checkbox" dataOwner="'+data+'"value='+value.id+' name="xz"/>'+'<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'/detail?id='+value.id+'\';">'+value.name+'</a></td>'+ ' <td >'+data+' </td>'+'<td >'+value.startdate+ '</td>'+'<td>'+value.enddate+'</td>'+'<br>'
@@ -222,7 +223,6 @@
 								$("#tbody").html(htmls)
 							}
 						})
-
 					})
 					var totalPages=window.total%pageSize==0?window.total/pageSize:parseInt(window.total/pageSize)+1;
 					//分页插件
