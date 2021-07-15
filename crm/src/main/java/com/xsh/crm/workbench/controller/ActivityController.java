@@ -129,11 +129,12 @@ public class ActivityController {
      */
     @RequestMapping("/activitySave")
     @ResponseBody
-    public String activitySave( String name,String owner ,String startdate, String enddate, String cost, String description){
+    public String activitySave( HttpServletRequest request,String name,String owner ,String startdate, String enddate, String cost, String description){
         Activity activity = new Activity();
-        Student student = new Student();
+
+        Student student = (Student) request.getSession().getAttribute("student");
         activity.setId(UUIDUtil.getUUID());
-        activity.setName(name);
+        activity.setName(student.getName());
         activity.setOwner(owner);
         activity.setCost(cost);
         activity.setCreateby(student.getName());
@@ -141,6 +142,7 @@ public class ActivityController {
         activity.setDescription(description);
         activity.setEnddate(enddate);
         activity.setStartdate(startdate);
+        activity.setName(name);
         int i = activityServiceImpl.insertSelective(activity);
         if (i>0) {
             return "true";
