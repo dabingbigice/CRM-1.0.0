@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xsh.crm.workbench.dao.ClueActivityRelationMapper">
+  <resultMap id="BaseResultMap" type="com.xsh.crm.workbench.domain.ClueActivityRelation">
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="clueId" jdbcType="CHAR" property="clueid" />
+    <result column="activityId" jdbcType="CHAR" property="activityid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, clueId, activityId
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_clue_activity_relation
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_clue_activity_relation
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xsh.crm.workbench.domain.ClueActivityRelation">
+    insert into tbl_clue_activity_relation (id, clueId, activityId
+      )
+    values (#{id,jdbcType=CHAR}, #{clueid,jdbcType=CHAR}, #{activityid,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xsh.crm.workbench.domain.ClueActivityRelation">
+    insert into tbl_clue_activity_relation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="clueid != null">
+        clueId,
+      </if>
+      <if test="activityid != null">
+        activityId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="clueid != null">
+        #{clueid,jdbcType=CHAR},
+      </if>
+      <if test="activityid != null">
+        #{activityid,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xsh.crm.workbench.domain.ClueActivityRelation">
+    update tbl_clue_activity_relation
+    <set>
+      <if test="clueid != null">
+        clueId = #{clueid,jdbcType=CHAR},
+      </if>
+      <if test="activityid != null">
+        activityId = #{activityid,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xsh.crm.workbench.domain.ClueActivityRelation">
+    update tbl_clue_activity_relation
+    set clueId = #{clueid,jdbcType=CHAR},
+      activityId = #{activityid,jdbcType=CHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

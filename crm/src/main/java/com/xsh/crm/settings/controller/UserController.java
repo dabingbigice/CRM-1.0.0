@@ -2,15 +2,15 @@ package com.xsh.crm.settings.controller;
 
 import com.xsh.crm.exception.LoginException;
 import com.xsh.crm.settings.domain.Student;
+import com.xsh.crm.settings.service.DicService;
 import com.xsh.crm.settings.service.UserService;
-import com.xsh.crm.utils.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -19,6 +19,66 @@ import javax.servlet.http.HttpSession;
 public class UserController {
     @Autowired
     UserService userService;
+
+    /**
+     * /settings/dictionary/value/edit
+     */
+    @RequestMapping("/settings/dictionary/value/edit")
+    public String valueEdit(){
+        return "settings/dictionary/value/edit";
+    }
+    /**
+     * /settings/dictionary/value/save
+     */
+    @RequestMapping("/settings/dictionary/value/save")
+    public String valueSave(){
+        return "settings/dictionary/value/save";
+    }
+    /**
+     * 修改某个字典中的值
+     */
+    @RequestMapping("/settings/dictionary/type/edit")
+    public String typeEdit(){
+        return "settings/dictionary/type/edit";
+    }
+
+    /**
+     * 创建字典
+     */
+    @RequestMapping("/settings/dictionary/type/save")
+    public String typeSave(){
+        return "settings/dictionary/type/save";
+    }
+    /**
+     * 处理字典页面请求
+     * @return
+     */
+    @RequestMapping("/settings/value/index")
+    public String valueIndex(){
+        return "settings/dictionary/value/index";
+    }
+        @RequestMapping("/settings/type/index")
+        public String typeIndex(){
+            return "settings/dictionary/type/index";
+        }
+
+
+        /**
+     * 字典首页
+     * @return
+     */
+    @RequestMapping("/settings/dictionary/index")
+    public String dictionaryIndex(){
+        return "settings/dictionary/index";
+    }
+    /**
+     * 系统设置首页
+     * @return
+     */
+    @RequestMapping("/settings/index")
+    public String settingsIndex(){
+        return "settings/index";
+    }
     @RequestMapping("/index")
     public String index(){
 
@@ -26,7 +86,6 @@ public class UserController {
     }
     @RequestMapping("/login")
     public String login(){
-
         return "login";
     }
 
@@ -41,6 +100,7 @@ public class UserController {
     @ResponseBody
     public String userLogin(HttpServletRequest request, String username, String password){
         String ip = request.getRemoteAddr();
+
 
         try {
             Student login = userService.login(username, password,ip);
@@ -120,10 +180,7 @@ public class UserController {
 
 
 
-    @RequestMapping("/clue/index")
-    public String clueIndex(){
-        return "workbench/clue/index";
-    }
+
 
 
 

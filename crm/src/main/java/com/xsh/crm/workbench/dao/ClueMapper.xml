@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xsh.crm.workbench.dao.ClueMapper">
+  <resultMap id="BaseResultMap" type="com.xsh.crm.workbench.domain.Clue">
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="fullname" jdbcType="VARCHAR" property="fullname" />
+    <result column="appellation" jdbcType="VARCHAR" property="appellation" />
+    <result column="owner" jdbcType="CHAR" property="owner" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="job" jdbcType="VARCHAR" property="job" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="website" jdbcType="VARCHAR" property="website" />
+    <result column="mphone" jdbcType="VARCHAR" property="mphone" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="createBy" jdbcType="VARCHAR" property="createby" />
+    <result column="createTime" jdbcType="CHAR" property="createtime" />
+    <result column="editBy" jdbcType="VARCHAR" property="editby" />
+    <result column="editTime" jdbcType="CHAR" property="edittime" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="contactSummary" jdbcType="VARCHAR" property="contactsummary" />
+    <result column="nextContactTime" jdbcType="CHAR" property="nextcontacttime" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, fullname, appellation, owner, company, job, email, phone, website, mphone, state, 
+    source, createBy, createTime, editBy, editTime, description, contactSummary, nextContactTime, 
+    address
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_clue
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_clue
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xsh.crm.workbench.domain.Clue">
+    insert into tbl_clue (id, fullname, appellation, 
+      owner, company, job, email, 
+      phone, website, mphone, 
+      state, source, createBy, 
+      createTime, editBy, editTime, 
+      description, contactSummary, nextContactTime, 
+      address)
+    values (#{id,jdbcType=CHAR}, #{fullname,jdbcType=VARCHAR}, #{appellation,jdbcType=VARCHAR}, 
+      #{owner,jdbcType=CHAR}, #{company,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{website,jdbcType=VARCHAR}, #{mphone,jdbcType=VARCHAR}, 
+      #{state,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, #{createby,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=CHAR}, #{editby,jdbcType=VARCHAR}, #{edittime,jdbcType=CHAR}, 
+      #{description,jdbcType=VARCHAR}, #{contactsummary,jdbcType=VARCHAR}, #{nextcontacttime,jdbcType=CHAR}, 
+      #{address,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xsh.crm.workbench.domain.Clue">
+    insert into tbl_clue
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="fullname != null">
+        fullname,
+      </if>
+      <if test="appellation != null">
+        appellation,
+      </if>
+      <if test="owner != null">
+        owner,
+      </if>
+      <if test="company != null">
+        company,
+      </if>
+      <if test="job != null">
+        job,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="website != null">
+        website,
+      </if>
+      <if test="mphone != null">
+        mphone,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="createby != null">
+        createBy,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="editby != null">
+        editBy,
+      </if>
+      <if test="edittime != null">
+        editTime,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="contactsummary != null">
+        contactSummary,
+      </if>
+      <if test="nextcontacttime != null">
+        nextContactTime,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="fullname != null">
+        #{fullname,jdbcType=VARCHAR},
+      </if>
+      <if test="appellation != null">
+        #{appellation,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null">
+        #{owner,jdbcType=CHAR},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null">
+        #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null">
+        #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="mphone != null">
+        #{mphone,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="createby != null">
+        #{createby,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=CHAR},
+      </if>
+      <if test="editby != null">
+        #{editby,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        #{edittime,jdbcType=CHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="contactsummary != null">
+        #{contactsummary,jdbcType=VARCHAR},
+      </if>
+      <if test="nextcontacttime != null">
+        #{nextcontacttime,jdbcType=CHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xsh.crm.workbench.domain.Clue">
+    update tbl_clue
+    <set>
+      <if test="fullname != null">
+        fullname = #{fullname,jdbcType=VARCHAR},
+      </if>
+      <if test="appellation != null">
+        appellation = #{appellation,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null">
+        owner = #{owner,jdbcType=CHAR},
+      </if>
+      <if test="company != null">
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null">
+        job = #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null">
+        website = #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="mphone != null">
+        mphone = #{mphone,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="createby != null">
+        createBy = #{createby,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=CHAR},
+      </if>
+      <if test="editby != null">
+        editBy = #{editby,jdbcType=VARCHAR},
+      </if>
+      <if test="edittime != null">
+        editTime = #{edittime,jdbcType=CHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="contactsummary != null">
+        contactSummary = #{contactsummary,jdbcType=VARCHAR},
+      </if>
+      <if test="nextcontacttime != null">
+        nextContactTime = #{nextcontacttime,jdbcType=CHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xsh.crm.workbench.domain.Clue">
+    update tbl_clue
+    set fullname = #{fullname,jdbcType=VARCHAR},
+      appellation = #{appellation,jdbcType=VARCHAR},
+      owner = #{owner,jdbcType=CHAR},
+      company = #{company,jdbcType=VARCHAR},
+      job = #{job,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      website = #{website,jdbcType=VARCHAR},
+      mphone = #{mphone,jdbcType=VARCHAR},
+      state = #{state,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      createBy = #{createby,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=CHAR},
+      editBy = #{editby,jdbcType=VARCHAR},
+      editTime = #{edittime,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR},
+      contactSummary = #{contactsummary,jdbcType=VARCHAR},
+      nextContactTime = #{nextcontacttime,jdbcType=CHAR},
+      address = #{address,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

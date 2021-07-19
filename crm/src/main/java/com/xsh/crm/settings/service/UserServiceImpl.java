@@ -1,16 +1,23 @@
 package com.xsh.crm.settings.service;
 
 import com.xsh.crm.exception.LoginException;
+import com.xsh.crm.settings.dao.DicTypeMapper;
 import com.xsh.crm.settings.dao.StudentMapper;
+import com.xsh.crm.settings.domain.DicType;
+import com.xsh.crm.settings.domain.DicValue;
 import com.xsh.crm.settings.domain.Student;
 import com.xsh.crm.utils.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     StudentMapper studentMapper;
+
     @Override
     public Student login(String username, String password,String ip) throws LoginException {
         Student reslut = studentMapper.userLogin(username, password);

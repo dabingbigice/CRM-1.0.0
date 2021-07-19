@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xsh.crm.workbench.dao.ContactsActivityRelationMapper">
+  <resultMap id="BaseResultMap" type="com.xsh.crm.workbench.domain.ContactsActivityRelation">
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="contactsId" jdbcType="CHAR" property="contactsid" />
+    <result column="activityId" jdbcType="CHAR" property="activityid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, contactsId, activityId
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_contacts_activity_relation
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_contacts_activity_relation
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xsh.crm.workbench.domain.ContactsActivityRelation">
+    insert into tbl_contacts_activity_relation (id, contactsId, activityId
+      )
+    values (#{id,jdbcType=CHAR}, #{contactsid,jdbcType=CHAR}, #{activityid,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xsh.crm.workbench.domain.ContactsActivityRelation">
+    insert into tbl_contacts_activity_relation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="contactsid != null">
+        contactsId,
+      </if>
+      <if test="activityid != null">
+        activityId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="contactsid != null">
+        #{contactsid,jdbcType=CHAR},
+      </if>
+      <if test="activityid != null">
+        #{activityid,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xsh.crm.workbench.domain.ContactsActivityRelation">
+    update tbl_contacts_activity_relation
+    <set>
+      <if test="contactsid != null">
+        contactsId = #{contactsid,jdbcType=CHAR},
+      </if>
+      <if test="activityid != null">
+        activityId = #{activityid,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xsh.crm.workbench.domain.ContactsActivityRelation">
+    update tbl_contacts_activity_relation
+    set contactsId = #{contactsid,jdbcType=CHAR},
+      activityId = #{activityid,jdbcType=CHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>
