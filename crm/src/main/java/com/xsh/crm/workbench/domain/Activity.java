@@ -14,6 +14,15 @@ public class Activity {
     //总页数，万不得已才加上
     private int total =0;
     private String owner;
+    private String ownerName;
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
 
     private String name;
 

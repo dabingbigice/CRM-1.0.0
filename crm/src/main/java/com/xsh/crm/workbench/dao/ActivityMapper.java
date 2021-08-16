@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ActivityMapper {
@@ -28,7 +29,8 @@ public interface ActivityMapper {
                                   @Param("startDate") String startDate,@Param("endDate") String endDate );
     @Select("select count(*) from tbl_activity")
     Integer selects();
-
+    @Select("select * from tbl_activity where id not in(select activityId from tbl_clue_activity_relation where clueId=#{clueId})")
+    ArrayList<Activity> selectActivities(String clueId);
     Integer selectActivityCount(@Param("name") String name,@Param("owner") String owner,
                                 @Param("startDate") String startDate,@Param("endDate") String endDate);
 

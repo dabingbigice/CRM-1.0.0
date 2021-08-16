@@ -121,6 +121,7 @@
 				pickerPosition: "bottom-left"
 			});
 			$("#saveClue").click(function () {
+				alert($.trim($("#create-contactSummary").val()))
 				$.ajax({
 					url:"/clue/saveClue",
 					data:{
@@ -136,7 +137,7 @@
 						"state":$.trim($("#create-state").val()),
 						"source":$.trim($("#create-source").val()),
 						"description":$.trim($("#create-description").val()),
-						"contactSummary":$.trim($("#create-contactSummary").val()),
+						"contactsummary":$.trim($("#create-contactSummary").val()),
 						"nextContactTime":$.trim($("#create-nextContactTime").val()),
 						"address":$.trim($("#create-address").val())
 					},

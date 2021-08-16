@@ -38,11 +38,12 @@
 		})
 	}
 </script>
-
+	<style type="text/css">
+		body{background-image: url("/image/psc.jpg") }
+	</style>
 </head>
 <body>
 	<div style="position: absolute; top: 0px; left: 0px; width: 60%;">
-		<img th:src="@{/image/IMG_7114.JPG}" style="width: 100%; height: 90%; position: relative; top: 50px;">
 	</div>
 	<div id="top" style="height: 50px; background-color: #3C3C3C; width: 100%;">
 		<div style="position: absolute; top: 5px; left: 0px; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">CRM &nbsp;<span style="font-size: 12px;">&copy;2021&nbsp;相思湖学院</span></div>
@@ -63,7 +64,7 @@
 					</div>
 					<div class="checkbox"  style="position: relative;top: 30px; left: 10px;">
 						
-							<span id="msg"></span>
+							<span id="msg" style="color: blue"></span>
 						
 					</div>
 					<button type="button" onclick="login()" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 45px;">登录</button>
