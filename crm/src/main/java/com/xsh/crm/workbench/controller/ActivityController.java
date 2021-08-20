@@ -198,4 +198,5 @@ public class ActivityController {
         Student student = studentMapper.selectByPrimaryKey(id);
         return student.getName();
     }
+
 }

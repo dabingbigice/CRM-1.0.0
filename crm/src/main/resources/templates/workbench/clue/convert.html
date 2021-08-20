@@ -1,19 +1,57 @@
 ﻿<!DOCTYPE html>
-<html xmlns:th="www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
+	<meta charset="UTF-8">
 
-<link th:href="@{/jquery/bootstrap_3.3.0/css/bootstrap.min.css}" type="text/css" rel="stylesheet" />
-<script type="text/javascript" th:src="@{/jquery/jquery-1.11.1-min.js}"></script>
-<script type="text/javascript" th:src="@{/jquery/bootstrap_3.3.0/js/bootstrap.min.js}"></script>
+	<link th:href="@{/jquery/bootstrap_3.3.0/css/bootstrap.min.css}" type="text/css" rel="stylesheet" />
+	<link th:href="@{/jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css}" type="text/css" rel="stylesheet" />
 
-
-<link th:href="@{/static/jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css}" type="text/css" rel="stylesheet" />
-<script type="text/javascript" th:src="@{/static/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js}"></script>
-<script type="text/javascript" th:src="@{/static/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js}"></script>
-
+	<script type="text/javascript" th:src="@{/jquery/jquery-1.11.1-min.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery/bootstrap_3.3.0/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/jquery/bs_pagination/jquery.bs_pagination.min.css}">
+	<script type="text/javascript" th:src="@{/jquery/bs_pagination/jquery.bs_pagination.min.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery/bs_pagination/en.js}"></script>
 <script type="text/javascript">
 	$(function(){
+		$("#convert").click(function (){
+			if ($("#isCreateTransaction")[0].checked){
+				$("[name=flag]").val("a")
+				$("#tranForm").submit();
+				alert("转换成功")
+
+			}else {
+				$("#stage").html('')
+				$("#tranForm").submit();
+				alert("转换成功")
+			}
+
+		})
+		$("#submitActivityBtn").click(function (){
+			//取市场活动Id
+			var activityId=$("input[name=activity]:checked").val()
+			$("#activityId").val(activityId)
+			var activityName=$("#"+activityId).html()
+			$("#activity").val(activityName)
+			$("#searchActivityModal").modal("hide");
+		})
+		$("#open").click(function (){
+			$.ajax({
+				url:"/clue/clueConvert",
+				success:function (){
+				}
+			})
+			$("#searchActivityModal").modal("show")
+
+		})
+		$("#enter").keydown(function (even){
+			if (even.keyCode==13){
+				alert(111)
+				return false
+			}
+		})
+
 		$("#isCreateTransaction").click(function(){
 			if(this.checked){
 				$("#create-transaction2").show(200);
@@ -21,7 +59,17 @@
 				$("#create-transaction2").hide(200);
 			}
 		});
+
+		$(".time").datetimepicker({
+			minView: "month",
+			language: 'zh-CN',
+			format: 'yyyy-mm-dd',
+			autoclose: true,
+			todayBtn: true,
+			pickerPosition: "bottom-left"
+		});
 	});
+
 </script>
 
 </head>
@@ -32,20 +80,11 @@
 		<div class="modal-dialog" role="document" style="width: 90%;">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
-						<span aria-hidden="true">×</span>
-					</button>
-					<h4 class="modal-title">搜索市场活动</h4>
+
+					<h4 class="modal-title">关联市场活动</h4>
 				</div>
 				<div class="modal-body">
-					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
-						<form class="form-inline" role="form">
-						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
-						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
-						  </div>
-						</form>
-					</div>
+
 					<table id="activityTable" class="table table-hover" style="width: 900px; position: relative;top: 10px;">
 						<thead>
 							<tr style="color: #B3B3B3;">
@@ -58,35 +97,34 @@
 							</tr>
 						</thead>
 						<tbody>
+						<div th:each="activity:${#session.getAttribute('clueConvertActivities')}">
 							<tr>
-								<td><input type="radio" name="activity"/></td>
-								<td>发传单</td>
-								<td>2020-10-10</td>
-								<td>2020-10-20</td>
-								<td>zhangsan</td>
+								<td><input type="radio"th:value="${activity.id}" name="activity"/></td>
+								<td th:id="${activity.id}" th:text="${activity.name}">发传单</td>
+								<td th:text="${activity.startdate}">2020-10-10</td>
+								<td th:text="${activity.enddate}">2020-10-20</td>
+								<td th:text="${activity.ownerName}" >zhangsan</td>
 							</tr>
-							<tr>
-								<td><input type="radio" name="activity"/></td>
-								<td>发传单</td>
-								<td>2020-10-10</td>
-								<td>2020-10-20</td>
-								<td>zhangsan</td>
-							</tr>
+						</div>
 						</tbody>
 					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary" id="submitActivityBtn">提交</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<div id="title" class="page-header" style="position: relative; left: 20px;">
-		<h4>转换线索 <small>李四先生-动力节点</small></h4>
+		<h4>转换线索 <small><span id="clueId" th:value="${#session.getAttribute('clueBean').id}" th:text="${#session.getAttribute('clueBean').fullname}"></span>-<span th:text="${#session.getAttribute('clueBean').company}"></span></small></h4>
 	</div>
 	<div id="create-customer" style="position: relative; left: 40px; height: 35px;">
-		新建客户：动力节点
+		新建客户：<span th:text="${#session.getAttribute('clueBean').fullname}"></span>
 	</div>
 	<div id="create-contact" style="position: relative; left: 40px; height: 35px;">
-		新建联系人：李四先生
+		新建联系人：<span th:text="${#session.getAttribute('clueBean').company}"></span>
 	</div>
 	<div id="create-transaction1" style="position: relative; left: 40px; height: 35px; top: 25px;">
 		<input type="checkbox" id="isCreateTransaction"/>
@@ -94,37 +132,34 @@
 	</div>
 	<div id="create-transaction2" style="position: relative; left: 40px; top: 20px; width: 80%; background-color: #F7F7F7; display: none;" >
 	
-		<form>
+		<form id="tranForm" action="/clue/convertTrue" method="post">
+			<input name="flag" value="" hidden="hidden">
+			<input name="clueId" hidden="hidden"th:value="${#session.getAttribute('clueBean').id}">
 		  <div class="form-group" style="width: 400px; position: relative; left: 20px;">
 		    <label for="amountOfMoney">金额</label>
-		    <input type="text" class="form-control" id="amountOfMoney">
+		    <input type="text" class="form-control" name="money"id="amountOfMoney">
 		  </div>
 		  <div class="form-group" style="width: 400px;position: relative; left: 20px;">
 		    <label for="tradeName">交易名称</label>
-		    <input type="text" class="form-control" id="tradeName" value="动力节点-">
+		    <input type="text" class="form-control" id="tradeName" name="name"value="">
 		  </div>
 		  <div class="form-group" style="width: 400px;position: relative; left: 20px;">
 		    <label for="expectedClosingDate">预计成交日期</label>
-		    <input type="text" class="form-control" id="expectedClosingDate">
+			  <input class="form-control time"  type="text" name="expectedDate"id="search-endTime" readonly>
+
 		  </div>
 		  <div class="form-group" style="width: 400px;position: relative; left: 20px;">
 		    <label for="stage">阶段</label>
-		    <select id="stage"  class="form-control">
-		    	<option></option>
-		    	<option>资质审查</option>
-		    	<option>需求分析</option>
-		    	<option>价值建议</option>
-		    	<option>确定决策者</option>
-		    	<option>提案/报价</option>
-		    	<option>谈判/复审</option>
-		    	<option>成交</option>
-		    	<option>丢失的线索</option>
-		    	<option>因竞争丢失关闭</option>
+		    <select id="stage"  name="stage"class="form-control">
+				<div th:each="stageOne:${#request.getSession().getServletContext().getAttribute('stageList')}">
+		    	<option id="s" th:text="${stageOne.text}" th:value="${stageOne.value}"></option>
+				</div>
 		    </select>
 		  </div>
 		  <div class="form-group" style="width: 400px;position: relative; left: 20px;">
-		    <label for="activity">市场活动源&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#searchActivityModal" style="text-decoration: none;"><span class="glyphicon glyphicon-search"></span></a></label>
+		    <label for="activity">市场活动源&nbsp;&nbsp;<a href="javascript:void(0);" id="open" style="text-decoration: none;"><span class="glyphicon glyphicon-search"></span></a></label>
 		    <input type="text" class="form-control" id="activity" placeholder="点击上面搜索" readonly>
+			  <input type="hidden" id="activityId" name="activityid"/>
 		  </div>
 		</form>
 		
@@ -132,12 +167,16 @@
 	
 	<div id="owner" style="position: relative; left: 40px; height: 35px; top: 50px;">
 		记录的所有者：<br>
-		<b>zhangsan</b>
+		<b th:text="${#session.getAttribute('clueBean').createby}">zhangsan</b>
+
 	</div>
 	<div id="operation" style="position: relative; left: 40px; height: 35px; top: 100px;">
-		<input class="btn btn-primary" type="button" value="转换">
+		<input class="btn btn-primary" id="convert" type="button" value="转换">
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<input class="btn btn-default" type="button" value="取消">
 	</div>
 </body>
 </html>
+<script type="text/javascript">
+
+</script>

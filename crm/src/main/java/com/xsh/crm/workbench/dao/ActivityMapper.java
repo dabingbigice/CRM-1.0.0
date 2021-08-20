@@ -29,9 +29,14 @@ public interface ActivityMapper {
                                   @Param("startDate") String startDate,@Param("endDate") String endDate );
     @Select("select count(*) from tbl_activity")
     Integer selects();
-    @Select("select * from tbl_activity where id not in(select activityId from tbl_clue_activity_relation where clueId=#{clueId})")
+
+    @Select("SELECT res.OWNER,res.id,res.startDate,res.endDate,u.name as ownerName,res.name  FROM (\n" +
+            "SELECT OWNER,id,startDate,endDate,NAME FROM tbl_activity WHERE \n" +
+            "id NOT IN(SELECT activityId FROM tbl_clue_activity_relation WHERE clueId=#{clueId})\n" +
+            ") AS res LEFT JOIN `tbl_user` AS u ON res.owner=u.`id`")
     ArrayList<Activity> selectActivities(String clueId);
     Integer selectActivityCount(@Param("name") String name,@Param("owner") String owner,
                                 @Param("startDate") String startDate,@Param("endDate") String endDate);
-
+    @Select("SELECT u.name AS ownername ,act.id,act.name,act.startDate,endDate FROM `tbl_user`AS u RIGHT JOIN (SELECT *FROM `tbl_activity` )  AS act ON act.owner=u.`id`")
+    ArrayList<Activity> clueConvert();
 }

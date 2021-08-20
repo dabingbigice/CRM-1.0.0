@@ -218,7 +218,9 @@
 							success:function (data){
 								//展示数据
 								$("#owner").html(data)
-								window.html+='<tr class="active"><td><input type="checkbox" dataOwner="'+data+'"value='+value.id+' name="xz"/>'+'<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'/detail?id='+value.id+'\';">'+value.name+'</a></td>'+ ' <td >'+data+' </td>'+'<td >'+value.startdate+ '</td>'+'<td>'+value.enddate+'</td>'+'<br>'
+								window.html+='<tr class="active"><td><input type="checkbox" dataOwner="'+data+'"value='+value.id+' name="xz"/>'
+										+'<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'/detail?id='+value.id+'\';">'+value.name
+										+'</a></td>'+ ' <td >'+data+' </td>'+'<td >'+value.startdate+ '</td>'+'<td>'+value.enddate+'</td>'+'<br>'
 								var htmls=window["html"]
 								$("#tbody").html(htmls)
 							}
@@ -231,7 +233,7 @@
 						rowsPerPage: pageSize, // 每页显示的记录条数
 						maxRowsPerPage: 20, // 每页最多显示的记录条数
 						totalPages: totalPages, // 总页数
-						totalRows: window.total, // 总记录条数
+						totalRows: window.total, //
 
 						visiblePageLinks: 3, // 显示几个卡片
 

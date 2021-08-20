@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 public interface ClueActivityRelationMapper {
     int deleteByPrimaryKey(String id);
 
@@ -24,4 +26,8 @@ public interface ClueActivityRelationMapper {
     int remove(@Param("clueId") String clueId,@Param("activityId")String activityId );
     @Insert("insert into tbl_clue_activity_relation(clueId,activityId) values(#{id},#{acid})")
     int addActivityRelation(@Param("id") String id,@Param("acid") String acid);
+    @Delete("delete from tbl_clue_activity_relation where clueId=#{id}")
+    void deleteByCuleId(String id);
+    @Select("select activityid from tbl_clue_activity_relation where clueId=#{id} ")
+    List<ClueActivityRelation> selectByByCuleId(String id);
 }

@@ -1,6 +1,7 @@
 package com.xsh.crm.workbench.dao;
 
 import com.xsh.crm.workbench.domain.Clue;
+import com.xsh.crm.workbench.domain.ClueActivityRelation;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -22,4 +23,5 @@ public interface ClueMapper {
     int getAllClueCount();
     @Select("select * from tbl_clue limit #{offset},#{rows}")
     List<Clue> getClueToPage(@Param("offset") int n,@Param("rows") int s);
+   ;
 }

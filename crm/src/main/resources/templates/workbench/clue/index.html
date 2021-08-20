@@ -41,7 +41,6 @@
 					$.ajax({
 						url: "/clue/delete" + param,
 						success: function (data) {
-							alert(data)
 							window.location.reload()
 						}
 					})
@@ -121,7 +120,6 @@
 				pickerPosition: "bottom-left"
 			});
 			$("#saveClue").click(function () {
-				alert($.trim($("#create-contactSummary").val()))
 				$.ajax({
 					url:"/clue/saveClue",
 					data:{

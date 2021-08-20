@@ -5,12 +5,19 @@ import com.xsh.crm.settings.domain.DicValue;
 import com.xsh.crm.settings.domain.Student;
 import com.xsh.crm.utils.DateTimeUtil;
 import com.xsh.crm.utils.UUIDUtil;
-import com.xsh.crm.workbench.domain.Activity;
-import com.xsh.crm.workbench.domain.Clue;
+import com.xsh.crm.workbench.dao.ActivityMapper;
+import com.xsh.crm.workbench.dao.ClueActivityRelationMapper;
+import com.xsh.crm.workbench.dao.ClueMapper;
+import com.xsh.crm.workbench.dao.ContactsActivityRelationMapper;
+import com.xsh.crm.workbench.domain.*;
 import com.xsh.crm.workbench.service.ClueService;
+import com.xsh.crm.workbench.service.ContactService;
+import com.xsh.crm.workbench.service.CustomerService;
+import com.xsh.crm.workbench.service.TranService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +35,20 @@ public class ClueController {
     private ClueService clueService;
     @Autowired
     private StudentMapper studentMapper;
+    @Autowired
+    private ActivityMapper activityMapper;
+    @Autowired
+    private TranService tranService;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private ContactService contactService;
+    @Autowired
+    private ClueMapper clueMapper;
+    @Autowired
+    private ClueActivityRelationMapper clueActivityRelationMapper;
+    @Autowired
+    private ContactsActivityRelationMapper contactsActivityRelationMapper;
     @RequestMapping("/selectOwner")
     @ResponseBody
     public String selectOwner(String owner){
@@ -116,6 +137,12 @@ public class ClueController {
 
         return "workbench/clue/index";
     }
+
+    /**
+     * detail页的信息回显
+     * @param request
+     * @return
+     */
     @RequestMapping("/detail")
     public String detail(HttpServletRequest request){
         HttpSession session = request.getSession();
@@ -138,10 +165,25 @@ public class ClueController {
         request.setAttribute("act",activity);
         return "workbench/clue/detail";
     }
+
+    /**
+     * 转换时点击创建交易回显市场活动
+     * @param request
+     * @return
+     */
     @RequestMapping("/convert")
-    public String  convert() {
+    public String  convert(HttpServletRequest request) {
+        clueConvert(request);
         return "workbench/clue/convert";
     }
+
+    /**
+     * 移除线索
+     * @param clueId
+     * @param activityId
+     * @param request
+     * @return
+     */
     @RequestMapping("/removeClue")
     public String removeClue(String clueId,String activityId,HttpServletRequest request){
         int remove = clueService.remove(clueId,activityId);
@@ -155,6 +197,13 @@ public class ClueController {
         return "forward:/clue/detail?id="+clueBean.getId();
     }
 
+    /**
+     * 添加市场活动能
+     *
+     * @param id
+     * @param request
+     * @return
+     */
         @RequestMapping("/concatActivity")
         @ResponseBody
         public String concatActivity(String[] id,HttpServletRequest request){
@@ -165,4 +214,76 @@ public class ClueController {
             return "true";
         }
 
+    @RequestMapping("/clueConvert")
+    @ResponseBody
+    public String clueConvert(HttpServletRequest httpServletRequest){
+        ArrayList<Activity> activities = activityMapper.clueConvert();
+        httpServletRequest.getSession().setAttribute("clueConvertActivities",activities);
+        return "true";
+    }
+    /**
+     * 最终转换的数据
+     */
+    @PostMapping("/convertTrue")
+    public String convertTrue(HttpServletRequest request,Tran tran,String clueId,String flag){
+        Clue clueBean = (Clue) request.getSession().getAttribute("clueBean");
+        Student user= (Student) request.getSession().getAttribute("student");
+
+        if (flag.equals("a")){
+            //处理添加交易
+            tran.setId(UUIDUtil.getUUID());
+            tran.setCreateby(user.getName());
+            tran.setCreatetime(DateTimeUtil.getSysTime());
+            String owner = clueBean.getOwner();
+            tran.setOwner(owner);
+            tranService.clueConvertToTran(tran);//添加交易
+
+
+        }
+        //添加客户
+        Customer customer = new Customer();
+        customer.setId(clueBean.getId());
+        customer.setOwner(clueBean.getOwner());
+        customer.setName(clueBean.getCompany());
+        customer.setPhone(clueBean.getPhone());
+        customer.setCreateby(user.getName());
+        customer.setNextcontacttime(clueBean.getNextcontacttime());
+        customer.setDescription(clueBean.getDescription());
+        customer.setAddress(clueBean.getAddress());
+        customer.setCreatetime(DateTimeUtil.getSysTime());
+        customer.setContactsummary(clueBean.getContactsummary());
+        customer.setWebsite(clueBean.getWebsite());
+        customerService.addCustomer(customer);
+        //添加联系人
+        Contacts contacts = new Contacts();
+        contacts.setAppellation(clueBean.getAppellation());
+        contacts.setAddress(clueBean.getAddress());
+        contacts.setMphone(clueBean.getMphone());
+        contacts.setOwner(clueBean.getOwner());
+        contacts.setSource(clueBean.getSource());
+        contacts.setCustomerid(clueBean.getId());
+        contacts.setCreateby(user.getName());
+        contacts.setJob(clueBean.getJob());
+        contacts.setCreatetime(DateTimeUtil.getSysTime());
+        contacts.setEmail(clueBean.getEmail());
+        String contactuuid = UUIDUtil.getUUID();
+        contacts.setId(contactuuid);
+        System.out.println(contactuuid);
+        System.out.println(clueBean.getJob());
+        contacts.setFullname(clueBean.getFullname());
+        contacts.setNextcontacttime(customer.getNextcontacttime());
+        contactService.addContact(contacts);
+        //移除线索
+        List<ClueActivityRelation> clueActivityRelations = clueActivityRelationMapper.selectByByCuleId(clueBean.getId());
+        for (ClueActivityRelation clueActivityRelation : clueActivityRelations) {
+            ContactsActivityRelation contactsActivityRelation = new ContactsActivityRelation();
+            contactsActivityRelation.setActivityid(clueActivityRelation.getActivityid());
+            contactsActivityRelation.setContactsid(contactuuid);
+            contactsActivityRelation.setId(UUIDUtil.getUUID());
+            contactsActivityRelationMapper.insertSelective(contactsActivityRelation);
+        }
+        clueMapper.deleteByPrimaryKey(clueBean.getId());
+        clueActivityRelationMapper.deleteByCuleId(clueBean.getId());
+        return "workbench/clue/index";
+    }
 }

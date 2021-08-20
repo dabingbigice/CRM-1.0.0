@@ -27,10 +27,14 @@
     address
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from tbl_contacts
-    where id = #{id,jdbcType=CHAR}
+    SELECT c.name AS customerid,t.owner,t.id,t.source,t.fullname,t.appellation,
+           t.email,t.mphone,t.job,t.birth,t.createBy,t.createtime,
+           t.editby,t.edittime,t.description,t.contactsummary,t.nextContacttime,
+           t.address FROM `tbl_customer`  AS c RIGHT JOIN
+                          (SELECT u.name AS OWNER ,c.id,source,customerId,fullname,appellation,c.email,mphone,job,birth,c.createBy,c.createTime,c.editby,c.editTime,description
+                                ,contactSummary,nextContactTime,address  FROM `tbl_user`  AS u RIGHT JOIN (
+                            SELECT *FROM `tbl_contacts` ) AS c ON c.owner=u.`id`) AS t ON t.customerid=c.id
+    where t.id = #{id,jdbcType=CHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tbl_contacts

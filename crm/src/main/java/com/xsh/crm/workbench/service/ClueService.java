@@ -4,6 +4,7 @@ import com.xsh.crm.settings.domain.Student;
 import com.xsh.crm.workbench.domain.Activity;
 import com.xsh.crm.workbench.domain.Clue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ClueService {
@@ -25,4 +26,5 @@ public interface ClueService {
     List<Activity> selectActivities(String clueId);
 
     int addActivityRelation(String id, String acid);
+    ArrayList<Activity> clueConvert();
 }

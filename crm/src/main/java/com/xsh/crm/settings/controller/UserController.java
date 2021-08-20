@@ -4,6 +4,8 @@ import com.xsh.crm.exception.LoginException;
 import com.xsh.crm.settings.domain.Student;
 import com.xsh.crm.settings.service.DicService;
 import com.xsh.crm.settings.service.UserService;
+import com.xsh.crm.workbench.domain.Customer;
+import com.xsh.crm.workbench.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,13 +15,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @Slf4j
 public class UserController {
     @Autowired
     UserService userService;
-
+    @Autowired
+    CustomerService customerService;
     /**
      * /settings/dictionary/value/edit
      */
@@ -186,6 +190,7 @@ public class UserController {
 
     @RequestMapping("/customer/index")
     public String customerIndex(){
+
         return "workbench/customer/index";
     }
 

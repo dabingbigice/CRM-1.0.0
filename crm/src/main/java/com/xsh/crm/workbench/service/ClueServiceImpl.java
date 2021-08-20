@@ -96,4 +96,9 @@ public class ClueServiceImpl implements ClueService {
         clueActivityRelationMapper.addActivityRelation(id,acid);
         return 0;
     }
+
+    @Override
+    public ArrayList<Activity> clueConvert() {
+        return null;
+    }
 }

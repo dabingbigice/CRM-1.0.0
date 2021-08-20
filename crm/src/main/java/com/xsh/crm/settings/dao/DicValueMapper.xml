@@ -91,6 +91,6 @@
     where id = #{id,jdbcType=CHAR}
   </update>
   <select id="getEverTypeCodeValues" resultType="com.xsh.crm.settings.domain.DicValue">
-    select * from tbl_dic_value where typeCode=#{code}
+    select * from tbl_dic_value where typeCode=#{code} order by VALUE
   </select>
 </mapper>
