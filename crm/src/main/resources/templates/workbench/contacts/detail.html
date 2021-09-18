@@ -13,6 +13,45 @@
 	var cancelAndSaveBtnDefault = true;
 	
 	$(function(){
+		//解除关联
+
+
+
+		//关联
+		$("#guanlian").click(function (){
+			//声明数组
+			var arr = [];
+//获取被选中的复选框的值
+			$("[name=product]:checked").each(function () {
+				arr.push($(this).val());
+			});
+
+			$.ajax({
+				url:"/contact/addActivitys",
+				type: "post",
+				data: {
+					activityIds:arr.join(),
+					contactid:$("#getContactId")[0].value
+				},
+				success:function (){
+					alert("关联市场活动成功！")
+					location.reload();
+				}
+
+			})
+		})
+		$("#glhd").click(function (){
+			$.ajax({
+				url:"/contact/getActivitys",
+				data:{
+					concatId:$("#getContactId")[0].value
+				},
+				type:"get",
+				success:function (res){
+				}
+			})
+		})
+
 		$("#remark").focus(function(){
 			if(cancelAndSaveBtnDefault){
 				//设置remarkDiv的高度为130px
@@ -47,32 +86,15 @@
 			$(this).children("span").css("color","#E6E6E6");
 		});
 	});
-	
+
+
 </script>
 
 </head>
 <body>
 
 	<!-- 解除联系人和市场活动关联的模态窗口 -->
-	<div class="modal fade" id="unbundActivityModal" role="dialog">
-		<div class="modal-dialog" role="document" style="width: 30%;">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
-						<span aria-hidden="true">×</span>
-					</button>
-					<h4 class="modal-title">解除关联</h4>
-				</div>
-				<div class="modal-body">
-					<p>您确定要解除该关联关系吗？</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-danger" data-dismiss="modal">解除</button>
-				</div>
-			</div>
-		</div>
-	</div>
+
 	
 	<!-- 联系人和市场活动关联的模态窗口 -->
 	<div class="modal fade" id="bundActivityModal" role="dialog">
@@ -88,15 +110,13 @@
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
-						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
 					</div>
 					<table id="activityTable2" class="table table-hover" style="width: 900px; position: relative;top: 10px;">
 						<thead>
 							<tr style="color: #B3B3B3;">
-								<td><input type="checkbox"/></td>
+								<td><input  id="qx" type="checkbox"/></td>
 								<td>名称</td>
 								<td>开始日期</td>
 								<td>结束日期</td>
@@ -105,26 +125,23 @@
 							</tr>
 						</thead>
 						<tbody>
+						<div th:each="getActivity:${#session.getAttribute('getActivitys')}">
 							<tr>
-								<td><input type="checkbox"/></td>
-								<td>发传单</td>
-								<td>2020-10-10</td>
-								<td>2020-10-20</td>
-								<td>zhangsan</td>
+								<td><input  class="qxk" name="product" th:value="${getActivity.id}" type="checkbox"/></td>
+								<td th:text="${getActivity.name}">发传单</td>
+								<td th:text="${getActivity.startdate}">2020-10-10</td>
+								<td th:text="${getActivity.enddate}">2020-10-20</td>
+								<td th:text="${getActivity.owner}">zhangsan</td>
 							</tr>
-							<tr>
-								<td><input type="checkbox"/></td>
-								<td>发传单</td>
-								<td>2020-10-10</td>
-								<td>2020-10-20</td>
-								<td>zhangsan</td>
-							</tr>
+						</div>
+
+
 						</tbody>
 					</table>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
+					<button  id="guanlian" type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
 				</div>
 			</div>
 		</div>
@@ -275,7 +292,8 @@
 	<div style="position: relative; left: 40px; top: -30px;">
 		<div class="page-header">
 			<h3 th:text="${#session.getAttribute('contactsBean').fullname}">李四先生 <small> - </small></h3>
-			<span  th:text="${#session.getAttribute('contactsBean').customerid}"></span>
+			<input type="text" hidden="hidden" id="getContactId" th:value="${#session.getAttribute('contactsBean').id}">
+			<span   th:text="${#session.getAttribute('contactsBean').customerid}"></span>
 		</div>
 		<div style="position: relative; height: 50px; width: 500px;  top: -72px; left: 700px;">
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editContactsModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
@@ -427,14 +445,15 @@
 							<td></td>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="tbody" value="aaa">
 					<div th:each="activity:${#session.getAttribute('contactsActivities')}">
+
 						<tr>
 						<td th:text="${activity.name}"> <a href="/activity/detail.html" style="text-decoration: none;">发传单</a></td>
 						<td th:text="${activity.startdate}">2020-10-10</td>
 						<td th:text="${activity.enddate}">2020-10-20</td>
 						<td th:text="${activity.owner}">zhangsan</td>
-						<td><a href="javascript:void(0);" data-toggle="modal" data-target="#unbundActivityModal" style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
+						<td><a   th:href="@{'/contact/delete?activityId='+${activity.id}+'&contactId='+${#session.getAttribute('contactsBean').id}}"   style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
 						</tr>
 
 					</div>
@@ -444,7 +463,7 @@
 			</div>
 			
 			<div>
-				<a href="javascript:void(0);" data-toggle="modal" data-target="#bundActivityModal" style="text-decoration: none;"><span class="glyphicon glyphicon-plus"></span>关联市场活动</a>
+				<a   href="javascript:void(0);" id="glhd" data-toggle="modal" data-target="#bundActivityModal" style="text-decoration: none;"><span class="glyphicon glyphicon-plus"></span>关联市场活动</a>
 			</div>
 		</div>
 	</div>
@@ -453,3 +472,10 @@
 	<div style="height: 200px;"></div>
 </body>
 </html>
+<script type="text/javascript">
+	$("#qx").click(function (){
+		$(".qxk").each(function (){
+			this.checked=!this.checked;
+		})
+	})
+</script>

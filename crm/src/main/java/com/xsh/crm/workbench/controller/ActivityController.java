@@ -137,6 +137,7 @@ public class ActivityController {
         activity.setName(student.getName());
         activity.setOwner(owner);
         activity.setCost(cost);
+        activity.setEdittime(DateTimeUtil.getSysTime());
         activity.setCreateby(student.getName());
         activity.setCreatetime(DateTimeUtil.getSysTime());
         activity.setDescription(description);

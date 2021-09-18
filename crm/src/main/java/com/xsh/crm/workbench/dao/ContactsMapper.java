@@ -4,9 +4,10 @@ import com.xsh.crm.workbench.domain.Activity;
 import com.xsh.crm.workbench.domain.Contacts;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface ContactsMapper {
     int deleteByPrimaryKey(String id);
 
@@ -34,4 +35,7 @@ public interface ContactsMapper {
             "ON c.`activityId`=a.`id`\n" +
             ") AS t ON t.owner = u.id")
     List<Activity> selectActivitiesByContactId(String id);
+    @Select("SELECT a.`id`,a.`name`,a.`startDate`,a.`endDate`,u.name AS OWNER FROM `tbl_activity` AS a LEFT JOIN  `tbl_user` AS u  ON a.`owner`=u.`id` WHERE  a.id \n" +
+            "NOT IN (SELECT activityId FROM `tbl_contacts_activity_relation` WHERE `contactsId`=#{concatId})")
+    List<Activity> getActivitys(String concatId);
 }
