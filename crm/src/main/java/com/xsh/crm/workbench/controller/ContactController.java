@@ -22,6 +22,14 @@ public class ContactController {
     @Autowired
     private ContactService contactService;
 
+    @RequestMapping("deleteContact")
+    public String deleteContact(HttpServletRequest request){
+        String id = request.getParameter("id");
+        String customerId = contactService.selectCustomerId(id);
+        int i = contactService.deleteContactCustomerRelation(id);
+        return "forward:/customer/detail?id="+customerId;
+
+    }
     @GetMapping("/delete")
     public String delete(String activityId,String contactId){
         int delete = contactService.delete(activityId);

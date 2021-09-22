@@ -1,5 +1,6 @@
 package com.xsh.crm.workbench.controller;
 
+import com.xsh.crm.workbench.domain.Contacts;
 import com.xsh.crm.workbench.domain.Customer;
 import com.xsh.crm.workbench.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,8 @@ public class CustomerController {
         String id = request.getParameter("id");
         Customer customer = customerService.selectByPrimaryKeyConvertOwner(id);
         request.getSession().setAttribute("customer",customer);
-        System.out.println(request.getSession().getAttribute("customer"));
+        List<Contacts> contacts = customerService.getContact(id);
+        request.getSession().setAttribute("contacts",contacts);
         return "workbench/customer/detail";
     }
 

@@ -15,13 +15,15 @@
 	<script type="text/javascript">
 
 	$(function(){
+		window.total=0
 			$.ajax({
 				url:"/customer/size",
 				success:function (obj){
 					window.total=obj;
+					pageList(1,2)
+
 				}
 			})
-		pageList(1,2)
 		function pageList(pageNo,pageSize){
 			$.ajax({
 				url:"/customer/customers",

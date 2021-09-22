@@ -1,5 +1,6 @@
 package com.xsh.crm.workbench.service;
 
+import com.xsh.crm.workbench.domain.Contacts;
 import com.xsh.crm.workbench.domain.Customer;
 
 import java.util.List;
@@ -11,4 +12,6 @@ public interface CustomerService {
     int countCustoemr();
 
     Customer selectByPrimaryKeyConvertOwner(String id);
+
+    List<Contacts> getContact(String id);
 }

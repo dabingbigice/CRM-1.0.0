@@ -240,6 +240,7 @@ public class ClueController {
 
 
         }
+        String customerid =clueBean.getId();
         //添加客户
         Customer customer = new Customer();
         customer.setId(clueBean.getId());
@@ -254,6 +255,7 @@ public class ClueController {
         customer.setContactsummary(clueBean.getContactsummary());
         customer.setWebsite(clueBean.getWebsite());
         customerService.addCustomer(customer);
+
         //添加联系人
         Contacts contacts = new Contacts();
         contacts.setAppellation(clueBean.getAppellation());
@@ -282,6 +284,12 @@ public class ClueController {
             contactsActivityRelation.setId(UUIDUtil.getUUID());
             contactsActivityRelationMapper.insertSelective(contactsActivityRelation);
         }
+        //关联联系人和客户
+        ContactsCustomerRelation contactsCustomerRelation = new ContactsCustomerRelation();
+        contactsCustomerRelation.setId(UUIDUtil.getUUID());
+        contactsCustomerRelation.setContactsId(contactuuid);
+        contactsCustomerRelation.setCustomerId(customerid);
+        contactService.addContactsCustomerRelation(contactsCustomerRelation);
         clueMapper.deleteByPrimaryKey(clueBean.getId());
         clueActivityRelationMapper.deleteByCuleId(clueBean.getId());
         return "workbench/clue/index";

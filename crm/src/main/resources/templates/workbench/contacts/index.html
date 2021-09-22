@@ -21,10 +21,11 @@
 			url:"/contact/size",
 			success:function (reslut){
 				window.total=reslut;
+				pageList(1,2)
 
 			}
 		})
-		pageList(1,2)
+
 		function pageList(pageNo,pageSize){
 			window.contactHtml=""
 			$.ajax({
@@ -47,6 +48,7 @@
 
 			var totalPages=window.total%pageSize==0?window.total/pageSize:parseInt(window.total/pageSize)+1;
 //分页插件
+			alert(window.total)
 			$("#activityPage").bs_pagination({
 				currentPage: pageNo, // 页码，传参
 				rowsPerPage: pageSize, // 每页显示的记录条数，传参

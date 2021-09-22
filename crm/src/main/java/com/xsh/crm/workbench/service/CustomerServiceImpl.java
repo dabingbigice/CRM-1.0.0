@@ -1,6 +1,7 @@
 package com.xsh.crm.workbench.service;
 
 import com.xsh.crm.workbench.dao.CustomerMapper;
+import com.xsh.crm.workbench.domain.Contacts;
 import com.xsh.crm.workbench.domain.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +32,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer selectByPrimaryKeyConvertOwner(String id) {
         return      customerMapper.selectByPrimaryKeyConvertOwner(id);
+    }
+
+    @Override
+    public List<Contacts> getContact(String id) {
+        return         customerMapper.getContact(id);
+
     }
 }

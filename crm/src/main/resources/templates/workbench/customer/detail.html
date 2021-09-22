@@ -465,12 +465,15 @@
 						</tr>
 					</thead>
 					<tbody>
+					<div th:each="contact:${#session.getAttribute('contacts')}">
 						<tr>
-							<td><a href="../contacts/detail.html" style="text-decoration: none;">李四</a></td>
-							<td>lisi@bjpowernode.com</td>
-							<td>13543645364</td>
-							<td><a href="javascript:void(0);" data-toggle="modal" data-target="#removeContactsModal" style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>删除</a></td>
+							<td><a th:href="@{'/contact/detail?id='+${contact.id}}" style="text-decoration: none;" th:text="${contact.fullname}">李四</a></td>
+							<td th:text="${contact.email}">lisi@bjpowernode.com</td>
+							<td th:text="${contact.mphone}">13543645364</td>
+							<td><a th:href="@{'/contact/deleteContact?id='+${contact.id}}" style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>删除</a></td>
 						</tr>
+					</div>
+
 					</tbody>
 				</table>
 			</div>
