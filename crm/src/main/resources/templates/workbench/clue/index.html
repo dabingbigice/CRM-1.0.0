@@ -66,7 +66,6 @@
 				$("#qx")[0].checked=false;
 				//计算页数
 				var totalPages = window.total%pageSize==0 ? window.total/pageSize :parseInt(window.total/pageSize)+1;
-				alert(totalPages)
 				$("#cluePage").bs_pagination({
 					currentPage: pageNo, // 页码
 					rowsPerPage: pageSize, // 每页显示的记录条数
